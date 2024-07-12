@@ -68,11 +68,15 @@ configure_zsh() {
     ZSHRC="$HOME/.zshrc"
     
     if [ -f "$ZSHRC" ]; then
-        # Change default theme to agnoster
-        sed -i '' 's/ZSH_THEME="robbyrussell"/ZSH_THEME="agnoster"/g' "$ZSHRC"
-        
-        # Install plugins
-        sed -i '' 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' "$ZSHRC"
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            # MacOS
+            sed -i '' 's/ZSH_THEME="robbyrussell"/ZSH_THEME="agnoster"/g' "$ZSHRC"
+            sed -i '' 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' "$ZSHRC"
+        else
+            # Linux
+            sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="agnoster"/g' "$ZSHRC"
+            sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' "$ZSHRC"
+        fi
         
         # Install plugin dependencies
         if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
