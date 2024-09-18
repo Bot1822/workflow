@@ -1,53 +1,13 @@
 #!/bin/bash
 
-# Global variables
-PACKAGE_MANAGER=""
-
-# Function to check package manager
-check_package_manager() {
-    if command -v apt &> /dev/null
-    then
-        PACKAGE_MANAGER="apt"
-    elif command -v brew &> /dev/null
-    then
-        PACKAGE_MANAGER="brew"
-    elif command -v pacman &> /dev/null
-    then
-        PACKAGE_MANAGER="pacman"
-    elif command -v dnf &> /dev/null
-    then
-        PACKAGE_MANAGER="dnf"
-    elif command -v yum &> /dev/null
-    then
-        PACKAGE_MANAGER="yum"
-    else
-        echo "No package manager found. Please install a package manager (apt, brew, pacman, dnf, yum) and try again."
-        exit 1
-    fi
-}
+source get_package_manager.sh
 
 # Function to check if zsh is installed
 check_install_zsh() {
     if ! command -v zsh &> /dev/null
     then
         echo "zsh is not installed. Installing zsh..."
-        case $PACKAGE_MANAGER in
-            apt)
-                sudo apt install zsh -y
-                ;;
-            brew)
-                brew install zsh
-                ;;
-            pacman)
-                sudo pacman -S zsh --noconfirm
-                ;;
-            dnf)
-                sudo dnf install zsh -y
-                ;;
-            yum)
-                sudo yum install zsh -y
-                ;;
-        esac
+        $PACKAGE_MANAGER install zsh -y
     else
         echo "zsh is already installed."
     fi
@@ -102,7 +62,6 @@ setup_workspace() {
     read -p "Enter the path to your workspace: " workspace_path
     if [ -d "$workspace_path" ]; then
         echo "export WORKSPACE=$workspace_path" >> ~/.zshrc
-        echo "cd \$WORKSPACE" >> ~/.zshrc
         echo "alias cdw='cd \$WORKSPACE'" >> ~/.zshrc
         echo "Workspace setup complete."
     else
