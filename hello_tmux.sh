@@ -46,7 +46,29 @@ set_default_shell() {
     # set selected shell as default shell
     echo "Setting $SHELL as default shell..."
     SHELL_PATH=$(command -v "$SHELL")
-    echo "set -g default-shell $SHELL_PATH" > "$TMUX_CONFIG_FILE"
+    DEFAULT_SHELL_LINE="set -g default-shell $SHELL_PATH"
+
+    if grep -q '^set -g default-shell ' "$TMUX_CONFIG_FILE"; then
+        TMP_FILE="$(mktemp 2>/dev/null || mktemp -t tmuxconf)"
+        awk -v newline="$DEFAULT_SHELL_LINE" '
+            BEGIN { replaced = 0 }
+            /^set -g default-shell / {
+                if (!replaced) {
+                    print newline
+                    replaced = 1
+                }
+                next
+            }
+            { print }
+            END {
+                if (!replaced) {
+                    print newline
+                }
+            }
+        ' "$TMUX_CONFIG_FILE" > "$TMP_FILE" && mv "$TMP_FILE" "$TMUX_CONFIG_FILE"
+    else
+        echo "$DEFAULT_SHELL_LINE" >> "$TMUX_CONFIG_FILE"
+    fi
 }
 
 # main function
