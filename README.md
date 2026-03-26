@@ -45,6 +45,19 @@ To run the script:
 bash hello_tmux.sh
 ```
 
+`hello_yazi.sh`
+This script will:
+
+- Install `yazi` without requiring `sudo` by preferring user-space package managers such as `brew` or `cargo`.
+- Copy the repository's [`yazi/`](./yazi) configuration into `~/.config/yazi` so Yazi can update local state safely.
+- Sync the plugins and flavor declared in `yazi/package.toml`.
+
+To run the script:
+
+```bash
+bash hello_yazi.sh
+```
+
 Notes
 - Ensure you have the necessary permissions to install software on your system.
 - The scripts are designed to work on both macOS and Linux systems.
