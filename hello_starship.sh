@@ -21,6 +21,18 @@ resolve_starship_bin() {
     return 1
 }
 
+has_admin_access() {
+    if [ "$(id -u)" -eq 0 ]; then
+        return 0
+    fi
+
+    if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
+        return 0
+    fi
+
+    return 1
+}
+
 install_starship() {
     if resolve_starship_bin >/dev/null 2>&1; then
         echo "starship is already installed."
@@ -40,8 +52,14 @@ install_starship() {
     fi
 
     if command -v curl >/dev/null 2>&1; then
-        echo "Installing starship with the official installer..."
-        curl -sS https://starship.rs/install.sh | sh
+        if has_admin_access; then
+            echo "Admin access detected. Installing starship with the official installer defaults..."
+            curl -sS https://starship.rs/install.sh | sh -s -- -y
+        else
+            echo "No admin access detected. Installing starship into $HOME/.local/bin..."
+            mkdir -p "$HOME/.local/bin"
+            curl -sS https://starship.rs/install.sh | sh -s -- -y -b "$HOME/.local/bin"
+        fi
         return
     fi
 

@@ -61,7 +61,7 @@ bash hello_yazi.sh
 `hello_starship.sh`
 This script will:
 
-- Install `starship` by preferring `brew`, then `cargo`, and using `curl -sS https://starship.rs/install.sh | sh` as fallback.
+- Install `starship` by preferring `brew`, then `cargo`; when falling back to the official installer, detect admin access and use the default install location, otherwise install into `~/.local/bin`.
 - Copy the repository's [`starship/starship.toml`](./starship/starship.toml) configuration into `~/.config/starship.toml`.
 - Configure `starship` initialization for `zsh`, `bash`, or `fish`.
 
