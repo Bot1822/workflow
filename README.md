@@ -58,8 +58,29 @@ To run the script:
 bash hello_yazi.sh
 ```
 
+`hello_starship.sh`
+This script will:
+
+- Install `starship` by preferring `brew`, then `cargo`, and using `curl -sS https://starship.rs/install.sh | sh` as fallback.
+- Copy the repository's [`starship/starship.toml`](./starship/starship.toml) configuration into `~/.config/starship.toml`.
+- Configure `starship` initialization for `zsh`, `bash`, or `fish`.
+
+To run the script:
+
+```bash
+bash hello_starship.sh
+```
+
+Configure a specific shell, or all supported shells:
+
+```bash
+bash hello_starship.sh zsh
+bash hello_starship.sh all
+```
+
 Notes
 - Ensure you have the necessary permissions to install software on your system.
 - The scripts are designed to work on both macOS and Linux systems.
 - For zsh configuration, the script modifies the .zshrc file in your home directory.
 - For tmux configuration, the script creates or modifies the .tmux.conf file in your home directory.
+- The bundled starship theme uses Nerd Font glyphs, so install a Nerd Font to see the prompt correctly.
